@@ -65,14 +65,39 @@ void ACPP_ArrowChar::BeginPlay()
 	
 }
 
+void ACPP_ArrowChar::TurnAtRate(float Rate)
+{
+	// calculate delta for this frame from the rate information
+	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
+
 void ACPP_ArrowChar::MoveForward(float value)
 {
-	
+	if ((Controller != nullptr) && (value != 0.0f))
+	{
+		// find out which way is forward
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get forward vector
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		AddMovementInput(Direction, value);
+	}
 }
 
 void ACPP_ArrowChar::MoveRight(float value)
 {
-	
+	if ((Controller != nullptr) && (value != 0.0f))
+	{
+		// find out which way is right
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get right vector 
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		// add movement in that direction
+		AddMovementInput(Direction, value);
+	}
 }
 
 // Called every frame
