@@ -6,7 +6,9 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/InputComponent.h"
 #include "GameFramework/PlayerController.h"
+#include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
@@ -43,10 +45,33 @@ ACPP_ArrowChar::ACPP_ArrowChar()
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 }
 
+void ACPP_ArrowChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	check(PlayerInputComponent);
+
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	PlayerInputComponent->BindAxis("MoveForward", this, &ACPP_ArrowChar::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &ACPP_ArrowChar::MoveRight);
+}
+
 // Called when the game starts or when spawned
 void ACPP_ArrowChar::BeginPlay()
 {
 	Super::BeginPlay();
+	
+}
+
+void ACPP_ArrowChar::MoveForward(float value)
+{
+	
+}
+
+void ACPP_ArrowChar::MoveRight(float value)
+{
 	
 }
 
@@ -58,9 +83,4 @@ void ACPP_ArrowChar::Tick(float DeltaTime)
 }
 
 // Called to bind functionality to input
-void ACPP_ArrowChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
 
